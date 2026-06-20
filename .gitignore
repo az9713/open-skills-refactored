@@ -1,0 +1,25 @@
+# Local source bundle and generated working artifacts
+README.txt
+transcript.txt
+substack.txt
+open_skills_*_report.md
+open_skills_*_refactor.md
+browser_use_test_plan.md
+*.png
+
+# Unused local design-system materials from the imported bundle
+Anthropic Design System/.thumbnail
+Anthropic Design System/_adherence.oxlintrc.json
+Anthropic Design System/_ds_bundle.js
+Anthropic Design System/_ds_manifest.json
+Anthropic Design System/preview/
+Anthropic Design System/slides/
+Anthropic Design System/ui_kits/
+Anthropic Design System/uploads/
+Anthropic Design System/assets/*.png
+Anthropic Design System/assets/*.jpg
+Anthropic Design System/assets/*.html
+Anthropic Design System/assets/anthropic-wordmark.svg
+Anthropic Design System/assets/claude-mark.svg
+Anthropic Design System/README.md
+Anthropic Design System/SKILL.md

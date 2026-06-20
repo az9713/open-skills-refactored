@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Open Skills, Simplified</title>
+    <meta name="description" content="A complete Skill library of the Open Skills library with install prompts for every skill.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="anthropic-theme.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#skills">Skip to skills</a>
+
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Open Skills, Simplified home">
+        <span class="brand-mark" aria-hidden="true">OS</span>
+        <span><strong>Open Skills</strong><small>Skill library</small></span>
+      </a>
+      <nav class="topnav" aria-label="Primary navigation">
+        <a href="#groups">Skill groups</a>
+        <a href="#skills">Skills</a>
+        <a href="#workflows">Use cases</a>
+        <a href="#install">Install prompts</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="kicker">Agent procedures</p>
+          <h1 id="page-title">Find the work. Install the procedure. Verify the result.</h1>
+          <p class="lede">Open Skills helps agents repeat work with clear instructions, required inputs, expected outputs, and proof checks. Browse 31 skills, pick the one that matches the task, and copy the install prompt.</p>
+          <div class="hero-actions" aria-label="Quick actions">
+            <a class="button primary" href="#skills">Browse 31 skills</a>
+            <a class="button secondary" href="#workflows">View use cases</a>
+          </div>
+        </div>
+        <aside class="control-surface task-launcher" aria-label="Start with a task">
+          <div class="surface-header"><span>Start with a task</span><span>Pick a skill</span></div>
+          <div class="task-launcher-body">
+            <p>Choose the closest task. Each link jumps to a skill card with details and an install prompt.</p>
+            <div class="task-launcher-list">
+              <section class="task-launcher-row">
+                <h3>Clean up source material</h3>
+                <div>
+                  <button class="hero-task-link" type="button" data-hero-skill="media-transcription">Media Transcription</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="heavy-file-ingestion">Heavy File Ingestion</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="meeting-synthesis">Meeting Synthesis</button>
+                </div>
+              </section>
+              <section class="task-launcher-row">
+                <h3>Create or publish something</h3>
+                <div>
+                  <button class="hero-task-link" type="button" data-hero-skill="personal-voice-skill">Personal Voice Skill</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="html-artifact-builder">HTML Artifact Builder</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="personal-site-publisher">Personal Site Publisher</button>
+                </div>
+              </section>
+              <section class="task-launcher-row">
+                <h3>Check that work is actually done</h3>
+                <div>
+                  <button class="hero-task-link" type="button" data-hero-skill="browser-automation-qa">Browser Automation QA</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="testing-runbook-creator">Testing Runbook Creator</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="page-testing-memory">Page Testing Memory</button>
+                </div>
+              </section>
+              <section class="task-launcher-row">
+                <h3>Run agent work with less drift</h3>
+                <div>
+                  <button class="hero-task-link" type="button" data-hero-skill="goal-prompt-generator">Goal Prompt Generator</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="visible-delegation">Visible Delegation</button>
+                  <button class="hero-task-link" type="button" data-hero-skill="session-operating-map">Session Operating Map</button>
+                </div>
+              </section>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="groups" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Skill groups</p>
+          <h2>Choose the kind of work you want to repeat.</h2>
+          <p>Each group lists the skills it contains. Select a skill to jump to its card, then open details or copy its install prompt.</p>
+        </div>
+        <div id="areaMap" class="area-map" aria-label="Skill groups"></div>
+      </section>
+
+      <section id="skills" class="section skill-section">
+        <div class="section-heading compact">
+          <p class="eyebrow">Directory</p>
+          <h2>Every skill, with a complete install prompt.</h2>
+        </div>
+        <div class="toolbar" aria-label="Skill filters">
+          <label class="search-box"><span>Search</span><input id="searchInput" type="search" placeholder="Try browser, transcript, publish, prompt, or meeting"></label>
+          <div id="filterButtons" class="filters" aria-label="Filter by skill group"></div>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+        <div id="skillGrid" class="skill-grid"></div>
+      </section>
+
+      <section id="workflows" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Use cases</p>
+          <h2>Seven common ways to combine skills.</h2>
+          <p>These examples show which skills usually work together when the task is bigger than one procedure.</p>
+        </div>
+        <div id="workflowList" class="workflow-list"></div>
+      </section>
+
+      <section id="install" class="section install-section">
+        <div class="section-heading">
+          <p class="eyebrow">Install prompt library</p>
+          <h2>Copy one prompt, then test the installed skill.</h2>
+          <p>These prompts are complete enough to hand to Codex, Claude Code, Cursor, or another coding agent and ask it to create the local skill.</p>
+        </div>
+        <div class="prompt-browser">
+          <div id="promptList" class="prompt-list" aria-label="Install prompt index"></div>
+          <article class="prompt-reader" aria-live="polite">
+            <div class="prompt-reader-header">
+              <div><span id="promptArea" class="plain-name">Select a skill</span><h3 id="promptTitle">Install prompt</h3></div>
+              <button id="copyPrompt" class="button secondary" type="button">Copy prompt</button>
+            </div>
+            <pre id="promptText" tabindex="0">Select a skill to view its complete install prompt.</pre>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <aside id="detailPanel" class="detail-panel" aria-hidden="true" aria-labelledby="detailTitle">
+      <div class="detail-card" role="dialog" aria-modal="true">
+        <button id="closeDetail" class="icon-button" type="button" aria-label="Close detail panel">x</button>
+        <span id="detailArea" class="plain-name"></span>
+        <h2 id="detailTitle"></h2>
+        <p id="detailUse"></p>
+        <div class="detail-columns">
+          <section><h3>Outputs</h3><ul id="detailOutputs"></ul></section>
+          <section><h3>Requirements</h3><ul id="detailRequirements"></ul></section>
+          <section><h3>Verification</h3><ul id="detailVerification"></ul></section>
+        </div>
+        <a class="button primary" href="#install" id="detailPromptLink">Open install prompt</a>
+      </div>
+    </aside>
+
+    <footer class="site-footer">
+      <p>Based on the public Open Skills inventory. Prompt bodies are rewritten install prompts, not a verbatim mirror.</p>
+      <a href="https://unlock-ai.natebjones.com/open-skills">Original Open Skills site</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
