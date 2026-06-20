@@ -17,6 +17,11 @@ This is not an official Open Skills site and is not meant to replace the origina
 - A prompt browser with copy support
 - Detail panels for outputs, requirements, and verification steps
 
+## View The Page
+
+- [Open the local static page](./index.html)
+- Live page: <https://az9713.github.io/open-skills-refactored/>
+
 ## Design
 
 The visual style imports the local `Anthropic Design System/` materials from Claude Design. The page uses the Anthropic-inspired warm paper background, Crail accent, restrained borders, editorial type direction, and the provided Anthropic mark asset.
