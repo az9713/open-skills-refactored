@@ -44,6 +44,17 @@ Codex's built-in browser tooling was used to test component functionality. In pr
 
 Additional headless Edge checks were used to capture responsive screenshots during development.
 
+## Keeping This Page In Sync
+
+A GitHub Action (`.github/workflows/sync-open-skills.yml`) checks the source Open Skills site on a weekly schedule — and on demand via the Actions tab's **Run workflow** button — and opens a pull request when new skills or runbooks appear. The sync logic lives in `.claude/sync-open-skills.md`; the workflow needs a `CLAUDE_CODE_OAUTH_TOKEN` repository secret (generate it with `claude setup-token`).
+
+### Reusable skill and command
+
+The sync pattern is generalized into a Claude Code skill so it can be reused for any repo that tracks an external source:
+
+- `.claude/skills/external-source-sync-action/` — the skill. It investigates where the repo stores its data and whether the source is fetchable, then generates the workflow plus a per-repo instruction file and walks you through the secret and first run.
+- `.claude/commands/sync-setup.md` — a `/sync-setup [source URL]` slash command that invokes the skill.
+
 ## Run Locally
 
 Open `index.html` directly in a browser, or serve the folder locally:
