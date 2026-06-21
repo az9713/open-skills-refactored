@@ -1,0 +1,62 @@
+# Template for a Claude-powered "sync an external source into this repo" GitHub Action.
+# Replace every {{PLACEHOLDER}}. Keep the comments — they tell the maintainer what each block does.
+#   {{TITLE}}            human title, e.g. "Sync Open Skills"
+#   {{CONCURRENCY_GROUP}} kebab id, e.g. "sync-open-skills"
+#   {{INSTRUCTION_FILE}} path to the prose logic, e.g. ".claude/sync-open-skills.md"
+#   {{MAX_TURNS}}        agent iteration cap; 40 is plenty for a simple source, 50+ if it fetches many pages
+#   {{ISSUE_TITLE}}      failure-issue title, e.g. "Open Skills sync failed"
+name: {{TITLE}}
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"      # every Monday 09:00 UTC — adjust cadence as needed
+  workflow_dispatch:          # ...and a manual "Run workflow" button for testing / ad-hoc syncs
+
+# What the job's token may do: commit a branch + open a PR (contents, pull-requests),
+# fetch an OIDC token during auth (id-token), and open an issue if the run fails (issues).
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+  issues: write
+
+# Don't let two syncs run at once (avoids duplicate PRs).
+concurrency:
+  group: {{CONCURRENCY_GROUP}}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30        # hard ceiling so a stuck agent run can't burn minutes
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v5
+
+      - name: Run the sync agent
+        # Pinned to an immutable commit SHA (supply-chain hardening) since this step
+        # receives the CLAUDE_CODE_OAUTH_TOKEN. Re-pin after reviewing changelogs (Dependabot).
+        uses: anthropics/claude-code-action@51705da45eecce209d4700538bf8377d5b5fc695  # v1
+        with:
+          # Auth via a Claude Max subscription — NO per-token API billing.
+          # Generate with `claude setup-token`, store as the CLAUDE_CODE_OAUTH_TOKEN secret.
+          # (Swap for `anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}` to bill the API instead.)
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: "Read {{INSTRUCTION_FILE}} and follow it exactly."
+          claude_args: "--max-turns {{MAX_TURNS}}"
+
+      # If anything above failed, file ONE issue (deduped by label) so failures don't pile up.
+      - name: Open an issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          existing=$(gh issue list --state open --label sync-failure --limit 1 --json number --jq '.[0].number')
+          body=$(printf 'The scheduled {{TITLE}} workflow failed.\n\nRun log: %s\n\nCheck the failing step, fix it, then re-run with the **Run workflow** button.' "$run_url")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh label create sync-failure --color B60205 --description "Sync workflow failures" 2>/dev/null || true
+            gh issue create --title "⚠️ {{ISSUE_TITLE}}" --label sync-failure --body "$body"
+          fi
